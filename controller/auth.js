@@ -109,12 +109,19 @@ export const login = async (req, res) => {
       }
       
       const token = jwt.sign({ userId: user.id }, process.env.SECERT_KEY || "123456", { expiresIn: "2d" })
+      // res.cookie("token", token, {
+      //   httpOnly: false,
+      //   sameSite:"Lax", 
+      //   secure: true,                   
+      //   maxAge: 2* 24 * 60 * 60 * 1000,      
+      // });
       res.cookie("token", token, {
-        httpOnly: false,
-        sameSite:"Lax", 
-        secure: true,                   
-        maxAge: 2* 24 * 60 * 60 * 1000,      
+        httpOnly: true,      // Prevent JavaScript access for added security.
+        sameSite: "None",    // Required for cross-origin requests (e.g., if your frontend and backend are on different domains).
+        secure: true,        // Ensures cookies are sent over HTTPS.
+        maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days.
       });
+      
       return res.status(200).json({ msg: "Login Succesfully", data: user, token: token })
     }
   } catch (error) {
