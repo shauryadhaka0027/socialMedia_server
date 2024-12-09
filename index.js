@@ -11,11 +11,10 @@ import { app, server } from './utils/socket.js';
 dotenv.config();
 const port = 3000;
 
-
-
-
+const url=process.env.PRODUCTION_URL
+  
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: [url],
     credentials: true,
     methods: ["GET", "POST", "PATCH"],
 }))
