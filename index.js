@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { app, server } from './utils/socket.js';
 dotenv.config();
-const port = 3000;
+const port = process.env.PORT 
 
 const url=process.env.PRODUCTION_URL
   
