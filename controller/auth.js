@@ -48,11 +48,12 @@ export const register = async (req, res) => {
 
     const token = jwt.sign({ userId: newUser.id }, process.env.SECERT_KEY || "123456", { expiresIn: "2d" })
     res.cookie("token", token, {
-      httpOnly: true,
-      sameSite:"Lax", 
-      secure: true,                   
-      maxAge: 2* 24 * 60 * 60 * 1000,      
+      httpOnly: true,      
+      sameSite: "None",    
+      secure: true,        
+      maxAge: 2 * 24 * 60 * 60 * 1000, 
     });
+
 
     return res.status(201).json({
       message: "User registered successfully",
@@ -130,11 +131,12 @@ export const login = async (req, res) => {
       //   maxAge: 2* 24 * 60 * 60 * 1000,      
       // });
       res.cookie("token", token, {
-        httpOnly: true,
-        sameSite:"Lax", 
-        secure: true,                   
-        maxAge: 2* 24 * 60 * 60 * 1000,      
+        httpOnly: true,      
+        sameSite: "None",    
+        secure: true,        
+        maxAge: 2 * 24 * 60 * 60 * 1000, 
       });
+  
       return res.status(200).json({ msg: "Login Succesfully", data: user, token: token })
     }
   } catch (error) {
