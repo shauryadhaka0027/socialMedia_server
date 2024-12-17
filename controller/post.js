@@ -47,7 +47,7 @@ export const userPost = async (req, res) => {
 
 export const getUserPost = async (req, res) => {
     try {
-        const userId = req.body.UserId;
+        const {userId} = req.body
 
         const findUser = await User.findById(userId).populate("following");
 
