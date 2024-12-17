@@ -14,7 +14,7 @@ export const auth = (req, res, next) => {
 
         if(token){
             if(blackList.includes(token)){
-                res.send({"msg":"user login again"});
+               return  res.send({"msg":"user login again"});
             }
         }
 
