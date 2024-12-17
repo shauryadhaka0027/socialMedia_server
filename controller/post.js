@@ -55,11 +55,17 @@ export const getUserPost = async (req, res) => {
             return res.status(404).json({ msg: "User not found" });
         }
 
+        
+        const followingUserIds = findUser.followers
+            .filter((user) => user.status === "follow") 
+            .map((user) => user.userId); 
+        const followersUserIds = findUser.following.filter((user) => user.status === "follow") 
+        .map((user) => user.userId);
 
-        const followingUserIds = findUser.following.map((user) => user._id);
+        
+        const queryUserIds = [...followingUserIds, userId,...followersUserIds];
 
-        const queryUserIds = [...followingUserIds, userId];
-
+       
         const posts = await Post.find({ user: { $in: queryUserIds } })
             .populate("user", "username profilePicture")
             .sort({ createdAt: -1 });
@@ -70,6 +76,7 @@ export const getUserPost = async (req, res) => {
         res.status(500).json({ msg: error.message });
     }
 };
+
 
 
 export const getLikes = async (req, res) => {
@@ -157,8 +164,8 @@ export const getComments = async (req, res) => {
 
 export const updatePostById = async (req, res) => {
     const { postId, content } = req.body;
-    console.log("postId", postId);
-    console.log("content", content);
+    // console.log("postId", postId);
+    // console.log("content", content);
 
     try {
 

@@ -2,7 +2,7 @@
 import express from 'express';
 import { upload } from '../utils/multer.js';
 
-import { addFollowering, fetchUsers, login, passwordChange, profilePictureChange, register, userDetailsById, userProfileUpdate, userUnfollow } from '../controller/auth.js';
+import { addFollowering, fetchUsers, login, passwordChange, profilePictureChange, register, searchUser, userDetailsById, userProfileUpdate, userUnfollow } from '../controller/auth.js';
 import { auth } from '../middleware/auth.js';
 import { logout } from '../controller/logout.js';
 
@@ -21,5 +21,5 @@ router.post("/user/userUnfollow", auth, userUnfollow)
 router.patch("/user/updateUser", upload.single("profilePicture"), auth, userProfileUpdate)
 router.patch("/user/updatePassword", auth, passwordChange)
 router.post("/user/logout",logout)
-
+router.post("/user/search",auth,searchUser)
 export default router;
