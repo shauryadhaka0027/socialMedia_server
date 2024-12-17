@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const url=process.env.PRODUCTION_URL
+const url = process.env.PRODUCTION_URL
 
 const io = new Server(server, {
   cors: {
@@ -42,11 +42,11 @@ io.on("connection", (socket) => {
         postId,
       });
 
- 
+
       const populatedNotification = await Notification.findById(notification._id)
-      .populate('sender') 
-      .exec(); 
-      
+        .populate('sender')
+        .exec();
+
       // console.log("postUserId", postUserId)
       const recipientSocketId = usersocketMap[postUserId];
       // console.log("RecipientSocketId:", recipientSocketId);
@@ -73,8 +73,8 @@ io.on("connection", (socket) => {
 
       console.log("New follow notification saved:", notification);
       const populatedNotification = await Notification.findById(notification._id)
-      .populate('sender') 
-      .exec(); 
+        .populate('sender')
+        .exec();
 
       const recipientSocketId = usersocketMap[postUserId];
       io.to(recipientSocketId).emit(`notification_${postUserId}`, populatedNotification);
@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("comment", async (data) => {
-    const { postUserId, sender,postId } = data;
+    const { postUserId, sender, postId } = data;
     try {
 
       const notification = await Notification.create({
@@ -97,12 +97,30 @@ io.on("connection", (socket) => {
 
       console.log("New follow notification saved:", notification);
       const populatedNotification = await Notification.findById(notification._id)
-      .populate('sender') 
-      .populate('postId')
-      .exec(); 
+        .populate('sender')
+        .populate('postId')
+        .exec();
 
       const recipientSocketId = usersocketMap[postUserId];
       io.to(recipientSocketId).emit(`notification_${postUserId}`, populatedNotification);
+
+    } catch (error) {
+      console.error("Error saving follow notification:", error);
+    }
+  });
+
+
+  socket.on("Accept", async (data) => {
+    const { _id, sender } = data;
+    try {
+
+      const populatedNotification = await Notification.findByIdAndUpdate(_id, { type: "accept" })
+        .populate('sender')
+        .exec();
+
+      const recipientSocketId = usersocketMap[populatedNotification?.sender?._id];
+      console.log("populatedNotification", populatedNotification)
+      io.to(recipientSocketId).emit(`notification_${populatedNotification?.sender?._id}`, populatedNotification);
 
     } catch (error) {
       console.error("Error saving follow notification:", error);
