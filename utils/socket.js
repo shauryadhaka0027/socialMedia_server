@@ -69,6 +69,7 @@ io.on("connection", (socket) => {
         postUserId,
         sender,
         type: "follow",
+        read:true
       });
 
       console.log("New follow notification saved:", notification);
